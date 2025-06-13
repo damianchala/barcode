@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración - CampusWork</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#E53E3E", secondary: "#FC8181" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Navegación -->
+    <nav class="bg-white shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="text-primary text-2xl font-['Pacifico']">
+              CampusWork
+            </div>
+            <div class="hidden md:ml-10 md:flex md:space-x-8">
+              <a
+                href="/admin"
+                class="text-primary border-b-2 border-primary font-medium text-sm flex items-center px-1 pt-1"
+              >
+                Dashboard
+              </a>
+              <a
+                href="/ecommerce"
+                class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center px-1 pt-1"
+              >
+                Articulos
+              </a>
+              <a
+                href="/campuswork"
+                class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center px-1 pt-1"
+              >
+                Campuswork
+              </a>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <div class="flex items-center">
+              <span id="userName" class="text-gray-700 mr-4">Admin</span>
+              <button id="logoutBtn" class="text-gray-500 hover:text-gray-700">
+                <i class="ri-logout-box-line ri-lg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div id="mobileMenu" class="hidden bg-white w-full absolute z-50 shadow-lg">
+    <div class="px-4 py-2 space-y-2">
+        <a href="/admin" class="block py-2 text-primary font-medium">Dashboard</a>
+        <a href="/ecommerce" class="block py-2 text-gray-500 hover:text-gray-700 font-medium">Articulos</a>
+        <a href="/campuswork" class="block py-2 text-gray-500 hover:text-gray-700 font-medium">Campuswork</a>
+        <div class="py-2 border-t border-gray-200 mt-2">
+            <span class="block text-gray-700 font-medium">Admin</span>
+            <button id="mobileLogoutBtn" class="flex items-center py-2 text-gray-500 hover:text-gray-700">
+                <i class="ri-logout-box-line mr-2"></i> Cerrar sesión
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- Contenido Principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <h1 class="text-2xl font-bold mb-6">Panel de Administración</h1>
+
+      <!-- Tarjetas de Resumen -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mr-4"
+            >
+              <i class="ri-briefcase-line ri-lg"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Oportunidades Laborales</p>
+              <h3 id="totalOportunidades" class="text-2xl font-bold">
+                <%= totalOportunidades %>
+              </h3>
+            </div>
+          </div>
+          <div class="mt-4">
+            <a
+              href="/admin/oportunidades"
+              class="text-sm text-primary hover:underline"
+              >Ver todas</a
+            >
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600 mr-4"
+            >
+              <i class="ri-user-line ri-lg"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Usuarios Registrados</p>
+              <h3 id="totalUsuarios" class="text-2xl font-bold">
+                <%= totalUsuarios %>
+              </h3>
+            </div>
+          </div>
+          <div class="mt-4">
+            <a href="#" class="text-sm text-primary hover:underline"
+              >Ver detalles</a
+            >
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-100 text-purple-600 mr-4"
+            >
+              <i class="ri-search-line ri-lg"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Búsquedas Realizadas</p>
+              <h3 class="text-2xl font-bold">124</h3>
+            </div>
+          </div>
+          <div class="mt-4">
+            <a href="#" class="text-sm text-primary hover:underline"
+              >Ver estadísticas</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-medium mb-4">Acciones Rápidas</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="#"
+            id="nuevaOportunidadBtn"
+            class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary mr-3"
+            >
+              <i class="ri-add-line"></i>
+            </div>
+            <div>
+              <p class="font-medium">Nueva Oportunidad</p>
+              <p class="text-sm text-gray-500">Publicar oferta laboral</p>
+            </div>
+          </a>
+          <a
+            href="#"
+            id="nuevoProductoBtn"
+            class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 bg-opacity-10 text-green-500 mr-3"
+            >
+              <i class="ri-shopping-bag-line"></i>
+            </div>
+            <div>
+              <p class="font-medium">Agregar Producto</p>
+              <p class="text-sm text-gray-500">Para el ecommerce</p>
+            </div>
+          </a>
+          <a
+            href="#"
+            id="verProductosBtn"
+            class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-500 bg-opacity-10 text-purple-500 mr-3"
+            >
+              <i class="ri-list-check"></i>
+            </div>
+            <div>
+              <p class="font-medium">Ver Productos</p>
+              <p class="text-sm text-gray-500">Administrar productos</p>
+            </div>
+          </a>
+          <a
+            href="#"
+            class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 bg-opacity-10 text-blue-500 mr-3"
+            >
+              <i class="ri-file-chart-line"></i>
+            </div>
+            <div>
+              <p class="font-medium">Generar Informe</p>
+              <p class="text-sm text-gray-500">Estadísticas de uso</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Últimas Oportunidades -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium">Últimas Oportunidades Publicadas</h2>
+          <a
+            href="/admin/oportunidades"
+            class="text-sm text-primary hover:underline"
+            >Ver todas</a
+          >
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Título
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Empresa
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Tipo
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Fecha
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Estado
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="recentOportunidadesTableBody"
+              class="bg-white divide-y divide-gray-200"
+            >
+              <!-- Las oportunidades recientes se cargarán aquí dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Crear Oportunidad -->
+    <div
+      id="crearOportunidadModal"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-900">
+            Crear Nueva Oportunidad
+          </h2>
+          <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <form id="crearOportunidadForm" class="space-y-4">
+          <div>
+            <label
+              for="titulo"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Título</label
+            >
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="empresa"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Empresa</label
+            >
+            <input
+              type="text"
+              id="empresa"
+              name="empresa"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="descripcion"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Descripción</label
+            >
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="requisitos"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Requisitos</label
+            >
+            <textarea
+              id="requisitos"
+              name="requisitos"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="ubicacion"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Ubicación</label
+            >
+            <input
+              type="text"
+              id="ubicacion"
+              name="ubicacion"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="tipo"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Tipo</label
+            >
+            <select
+              id="tipo"
+              name="tipo"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            >
+              <option value="">Seleccionar tipo</option>
+              <option value="Medio Tiempo">Medio Tiempo</option>
+              <option value="Prácticas">Prácticas</option>
+              <option value="Por Horas">Por Horas</option>
+              <option value="Proyecto Específico">Proyecto Específico</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="horario"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Horario</label
+            >
+            <input
+              type="text"
+              id="horario"
+              name="horario"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="area_estudio"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Área de Estudio</label
+            >
+            <select
+              id="area_estudio"
+              name="area_estudio"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            >
+              <option value="">Seleccionar área</option>
+              <option value="Ingeniería">Ingeniería</option>
+              <option value="Negocios">Negocios</option>
+              <option value="Ciencias Sociales">Ciencias Sociales</option>
+              <option value="Salud">Salud</option>
+              <option value="Arte y Diseño">Arte y Diseño</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="modalidad"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Modalidad</label
+            >
+            <select
+              id="modalidad"
+              name="modalidad"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            >
+              <option value="">Seleccionar modalidad</option>
+              <option value="Presencial">Presencial</option>
+              <option value="Remoto">Remoto</option>
+              <option value="Híbrido">Híbrido</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="estado"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Estado</label
+            >
+            <select
+              id="estado"
+              name="estado"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+            >
+              <option value="activa">Activa</option>
+              <option value="inactiva">Inactiva</option>
+              <option value="pendiente">Pendiente de revisión</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-primary text-white py-2 rounded !rounded-button whitespace-nowrap font-medium"
+          >
+            Crear Oportunidad
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal para Crear Producto -->
+    <div
+      id="crearProductoModal"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-900">Crear Nuevo Producto</h2>
+          <button
+            id="closeProductoModalBtn"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <form id="crearProductoForm" class="space-y-4">
+          <div>
+            <label
+              for="tituloProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Título</label
+            >
+            <input
+              type="text"
+              id="tituloProducto"
+              name="titulo"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="descripcionProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Descripción</label
+            >
+            <textarea
+              id="descripcionProducto"
+              name="descripcion"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="precioProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Precio</label
+            >
+            <input
+              type="number"
+              id="precioProducto"
+              name="precio"
+              step="0.01"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="estadoProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Estado</label
+            >
+            <select
+              id="estadoProducto"
+              name="estado"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            >
+              <option value="Nuevo">Nuevo</option>
+              <option value="Como nuevo">Como nuevo</option>
+              <option value="Buen estado">Buen estado</option>
+              <option value="Usado">Usado</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="categoriaProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Categoría</label
+            >
+            <select
+              id="categoriaProducto"
+              name="categoria"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            >
+              <option value="Electrónicos">Electrónicos</option>
+              <option value="Libros">Libros</option>
+              <option value="Muebles">Muebles</option>
+              <option value="Ropa">Ropa</option>
+              <option value="Deportes">Deportes</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="imagenProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >URL de Imagen</label
+            >
+            <input
+              type="text"
+              id="imagenProducto"
+              name="imagen"
+              placeholder="https://via.placeholder.com/300x200"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+            />
+          </div>
+          <div>
+            <label
+              for="barcodeProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Código de Barras</label
+            >
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="barcodeProducto"
+                name="barcode"
+                placeholder="Ej: 7501234567890"
+                class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              />
+              <button 
+                type="button" 
+                id="generateBarcodeBtn"
+                class="bg-gray-200 text-gray-700 px-3 py-2 rounded text-sm hover:bg-gray-300"
+              >
+                Generar
+              </button>
+              <button 
+                type="button" 
+                id="scanBarcodeBtn"
+                class="bg-primary text-white px-3 py-2 rounded text-sm hover:bg-red-700"
+              >
+                <i class="ri-scan-line"></i>
+              </button>
+            </div>
+            <div class="mt-2">
+              <canvas id="barcodePreview"></canvas>
+            </div>
+          </div>
+          <div>
+            <label
+              for="ubicacionProducto"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Ubicación</label
+            >
+            <input
+              type="text"
+              id="ubicacionProducto"
+              name="ubicacion"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
+          >
+            Crear Producto
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal para ver y administrar productos -->
+    <div
+      id="productosModal"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-900">Administrar Productos</h2>
+          <button
+            id="cerrarProductosModalBtn"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Título
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Precio
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Estado
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Categoría
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              id="productosTableBody"
+              class="bg-white divide-y divide-gray-200"
+            >
+              <!-- Los productos se cargarán aquí dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para ver detalles del producto -->
+    <div
+      id="detalleProductoModal"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2
+            class="text-xl font-bold text-gray-900"
+            id="detalleProductoTitulo"
+          >
+            Detalles del Producto
+          </h2>
+          <button
+            id="cerrarDetalleProductoBtn"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+
+        <div id="detalleProductoContenido" class="space-y-4">
+          <!-- Los detalles del producto se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para confirmar eliminación -->
+    <div
+      id="confirmarEliminarModal"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+        <div class="text-center mb-4">
+          <i class="ri-error-warning-line text-red-500 text-4xl mb-2"></i>
+          <h2 class="text-xl font-bold text-gray-900">¿Estás seguro?</h2>
+          <p class="text-gray-600 mt-2">
+            Esta acción eliminará permanentemente el producto y no se puede
+            deshacer.
+          </p>
+        </div>
+
+        <div class="flex justify-center gap-4 mt-6">
+          <button
+            id="cancelarEliminarBtn"
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded"
+          >
+            Cancelar
+          </button>
+          <button
+            id="confirmarEliminarBtn"
+            class="px-4 py-2 bg-red-600 text-white rounded"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="/js/admin.js"></script>
+    <script src="/js/barcode.js"></script>
+    <script src="/js/barcode-scanner.js"></script>
+    <script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.querySelector('.md\\:hidden button');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+        
+        // Connect mobile logout button to the main logout functionality
+        if (mobileLogoutBtn && logoutBtn) {
+            mobileLogoutBtn.addEventListener('click', function() {
+                logoutBtn.click();
+            });
+        }
+    });
+</script>
+  </body>
+</html>

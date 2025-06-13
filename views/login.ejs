@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Registro</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <div class="container">
+    <h2 id="form-title">Iniciar Sesión</h2>
+    <form id="authForm" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" value="<%= email %>" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" required />
+      </div>
+      <button type="submit" id="submitButton">Ingresar</button>
+    </form>
+    <input type="hidden" id="perfilId" value="<%= perfilId %>" />
+  </div>
+
+  <script>
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const perfilId = document.getElementById('perfilId').value;
+
+      const res = await fetch('/api/usuarios/login-perfil', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, perfilId })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('userId', data.id);
+        localStorage.setItem('userNombre', data.nombre);
+        localStorage.setItem('userRole', data.rol);
+        window.location.href = data.redirectUrl || '/campuswork';
+      } else {
+        alert(data.error || 'Login fallido');
+      }
+    }
+  </script>
+</body>
+</html>

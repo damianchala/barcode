@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusWork - Plataforma para estudiantes</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#E53E3E', secondary: '#FC8181' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }   </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navegación -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-primary text-2xl font-['Pacifico']">CampusWork</div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="/campuswork"
+                            class="text-primary border-b-2 border-primary font-medium text-sm flex items-center px-1 pt-1">
+                            Empleos
+                        </a>
+                        <a href="/ecommerce"
+                            class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center px-1 pt-1">
+                            Articulos
+                        </a>
+                        <!-- <a href="#"
+                            class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center px-1 pt-1">
+                            Intercambios
+                        </a>
+                        <a href="#"
+                            class="text-gray-500 hover:text-gray-700 font-medium text-sm flex items-center px-1 pt-1">
+                            Mi Perfil
+                        </a> -->
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <!-- <button id="loginBtn" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap">
+                        Iniciar Sesión
+                    </button> -->
+                    <div class="ml-4 flex items-center md:hidden">
+                        <button type="button" class="w-10 h-10 flex items-center justify-center text-gray-500">
+                            <i class="ri-menu-line ri-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden bg-white w-full absolute z-50 shadow-lg">
+            <div class="px-4 py-2 space-y-2">
+                <a href="/campuswork" class="block py-2 text-primary font-medium">Empleos</a>
+                <a href="/ecommerce" class="block py-2 text-gray-500 hover:text-gray-700 font-medium">Articulos</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-red-50 to-red-100 overflow-hidden">
+        <div class="absolute inset-0 bg-center bg-cover"
+            style="background-image: url('https://public.readdy.ai/ai/img_res/ad79ee327d5eebb2bae2ba3253daf94f.jpg'); opacity: 0.9;">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="md:w-1/2">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Encuentra oportunidades que se adapten a tu vida
+                    estudiantil</h1>
+                <p class="text-lg text-gray-700 mb-8">Conectamos estudiantes con empleos de medio tiempo, prácticas
+                    profesionales y recursos académicos accesibles.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Sección de Búsqueda Principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6">
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="flex-1">
+                    <form id="searchForm" action="/campuswork/buscar" method="GET">
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-10 h-10 flex items-center justify-center">
+                                <i class="ri-search-line text-gray-400"></i>
+                            </div>
+                            <input type="text" id="searchQuery" name="query"
+                                class="search-input w-full pl-10 pr-4 py-2 border border-gray-300 rounded text-sm"
+                                placeholder="Buscar empleos, recursos o intercambios..."
+                                value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                        </div>
+                    </form>
+                </div>
+                <div class="flex gap-2">
+                    <!-- <div class="relative">
+                        <button
+                            class="flex items-center justify-between w-full px-4 py-2 text-sm bg-white border border-gray-300 rounded !rounded-button whitespace-nowrap">
+                            <span>Ubicación</span>
+                            <i class="ri-arrow-down-s-line ml-2"></i>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button
+                            class="flex items-center justify-between w-full px-4 py-2 text-sm bg-white border border-gray-300 rounded !rounded-button whitespace-nowrap">
+                            <span>Categoría</span>
+                            <i class="ri-arrow-down-s-line ml-2"></i>
+                        </button>
+                    </div> -->
+                    <button type="submit" form="searchForm" class="bg-primary text-white px-4 py-2 rounded !rounded-button whitespace-nowrap">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+            <!-- Pestañas -->
+            <!-- <div class="flex border-b border-gray-200 mb-6">
+                <button class="px-4 py-2 border-b-2 border-primary text-primary font-medium text-sm">
+                    Empleos
+                </button>
+                <button class="px-4 py-2 text-gray-500 font-medium text-sm">
+                    Recursos Académicos
+                </button>
+            </div> -->
+            <!-- Filtros rápidos -->
+            <!-- <div class="flex flex-wrap gap-2 mb-6">
+                <button class="px-3 py-1 bg-red-50 text-primary rounded-full text-sm">
+                    Medio Tiempo
+                </button>
+                <button class="px-3 py-1 bg-red-50 text-primary rounded-full text-sm">
+                    Prácticas Profesionales
+                </button>
+                <button class="px-3 py-1 bg-white border border-gray-300 text-gray-700 rounded-full text-sm">
+                    Remoto
+                </button>
+                <button class="px-3 py-1 bg-white border border-gray-300 text-gray-700 rounded-full text-sm">
+                    Fines de Semana
+                </button>
+                <button class="px-3 py-1 bg-white border border-gray-300 text-gray-700 rounded-full text-sm">
+                    Ingeniería
+                </button>
+                <button class="px-3 py-1 bg-white border border-gray-300 text-gray-700 rounded-full text-sm">
+                    Negocios
+                </button>
+            </div> -->
+        </div>
+    </div>
+    <!-- Contenido Principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Panel Lateral de Filtros -->
+            <div class="lg:w-1/4">
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h3 class="font-medium text-lg mb-4">Filtros</h3>
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm text-gray-700 mb-2">Tipo de Empleo</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="tipo" value="Medio Tiempo">
+                                <span class="ml-2 text-sm text-gray-700">Medio Tiempo</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="tipo" value="Prácticas Profesionales">
+                                <span class="ml-2 text-sm text-gray-700">Prácticas Profesionales</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="tipo" value="Proyecto Específico">
+                                <span class="ml-2 text-sm text-gray-700">Proyecto Específico</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm text-gray-700 mb-2">Área de Estudio</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="area" value="Ingeniería">
+                                <span class="ml-2 text-sm text-gray-700">Ingeniería</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="area" value="Negocios">
+                                <span class="ml-2 text-sm text-gray-700">Negocios</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="area" value="Ciencias Sociales">
+                                <span class="ml-2 text-sm text-gray-700">Ciencias Sociales</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="area" value="Salud">
+                                <span class="ml-2 text-sm text-gray-700">Salud</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="area" value="Arte y Diseño">
+                                <span class="ml-2 text-sm text-gray-700">Arte y Diseño</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm text-gray-700 mb-2">Rango Salarial ($/hora)</h4>
+                        <div class="mt-2">
+                            <input type="range" id="salaryRange" min="0" max="30" value="15" class="w-full">
+                            <div class="flex justify-between mt-1">
+                                <span class="text-xs text-gray-500">0$</span>
+                                <span id="currentSalary" class="text-xs text-gray-700">15$</span>
+                                <span class="text-xs text-gray-500">30$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm text-gray-700 mb-2">Horario</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="horario" value="Mañana">
+                                <span class="ml-2 text-sm text-gray-700">Mañana</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="horario" value="Tarde">
+                                <span class="ml-2 text-sm text-gray-700">Tarde</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="horario" value="Noche">
+                                <span class="ml-2 text-sm text-gray-700">Noche</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="horario" value="Fines de Semana">
+                                <span class="ml-2 text-sm text-gray-700">Fines de Semana</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm text-gray-700 mb-2">Modalidad</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="modalidad" value="Presencial">
+                                <span class="ml-2 text-sm text-gray-700">Presencial</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="modalidad" value="Remoto">
+                                <span class="ml-2 text-sm text-gray-700">Remoto</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded filter-checkbox" data-filter="modalidad" value="Híbrido">
+                                <span class="ml-2 text-sm text-gray-700">Híbrido</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="applyFilters" class="w-full bg-primary text-white px-4 py-2 rounded !rounded-button whitespace-nowrap">
+                        Aplicar Filtros
+                    </button>
+                    <button id="clearFilters" class="w-full mt-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded !rounded-button whitespace-nowrap">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+            <!-- Sección de Oportunidades Laborales -->
+            <div class="lg:w-3/4">
+                <h2 class="text-xl font-bold mb-6">Oportunidades Laborales Disponibles</h2>
+                <div class="space-y-6" id="jobListings">
+                    <% if (typeof oportunidades !== 'undefined' && oportunidades.length > 0) { %>
+                        <% oportunidades.forEach(oportunidad => { %>
+                            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900"><%= oportunidad.titulo %></h3>
+                                        <p class="text-primary font-medium"><%= oportunidad.empresa %></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="inline-block px-2 py-1 bg-red-50 text-primary text-xs rounded-full"><%= oportunidad.horario %></span>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-gray-600 text-sm mb-4"><%= oportunidad.descripcion %></p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="inline-flex items-center text-xs text-gray-600">
+                                            <i class="ri-map-pin-line mr-1"></i> <%= oportunidad.ubicacion %>
+                                        </span>
+                                        <span class="inline-flex items-center text-xs text-gray-600">
+                                            <i class="ri-book-open-line mr-1"></i> <%= oportunidad.area_estudio %>
+                                        </span>
+                                        <span class="inline-flex items-center text-xs text-gray-600">
+                                            <i class="ri-computer-line mr-1"></i> <%= oportunidad.modalidad %>
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <button class="text-primary hover:text-red-700 text-sm font-medium">
+                                            Ver detalles
+                                        </button>
+                                        <button class="bg-primary text-white px-4 py-2 rounded-full text-sm">
+                                            Aplicar ahora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                            <p class="text-gray-500">No hay oportunidades laborales disponibles en este momento.</p>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="mt-8 flex justify-center">
+                    <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded !rounded-button whitespace-nowrap">
+                        Cargar Más Empleos
+                    </button>
+                </div>
+                <!-- Mensaje para cuando no hay coincidencias con los filtros -->
+                <div id="noMatchesMessage" class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center mt-4 hidden">
+                    <p class="text-gray-500">No hay oportunidades que coincidan con los filtros seleccionados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sección de Estadísticas -->
+    <div class="bg-red-50 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-center mb-10">Nuestra Plataforma en Números</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">1,250+</div>
+                    <div class="text-gray-600">Empleos Disponibles</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">85%</div>
+                    <div class="text-gray-600">Tasa de Colocación</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">15,000+</div>
+                    <div class="text-gray-600">Usuarios Activos</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">3,400+</div>
+                    <div class="text-gray-600">Intercambios Realizados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sección de Recursos Académicos -->
+    <!-- <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Recursos Académicos Disponibles</h2>
+            <a href="#" class="text-primary font-medium">Ver Todos</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="resourceListings">
+        </div>
+    </div> -->
+    <!-- CTA Section -->
+    <div class="bg-gradient-to-r from-red-600 to-primary py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">¿Listo para impulsar tu carrera mientras estudias?</h2>
+            <p class="text-red-100 mb-8 max-w-3xl mx-auto">Únete a miles de estudiantes que han encontrado el equilibrio
+                perfecto entre sus estudios y desarrollo profesional.</p>
+            <!-- <button class="bg-white text-primary px-6 py-3 rounded-lg font-medium !rounded-button whitespace-nowrap">
+                Registrarse Gratis
+            </button> -->
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="text-white text-2xl font-['Pacifico'] mb-4">CampusWork</div>
+                    <p class="text-sm">Conectando estudiantes con oportunidades laborales y recursos académicos desde
+                        2023.</p>
+                    <div class="flex mt-4 space-x-4">
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
+                            <i class="ri-twitter-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
+                            <i class="ri-instagram-fill"></i>
+                        </a>
+                        <a href="#"
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
+                            <i class="ri-linkedin-fill"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium mb-4">Enlaces Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Buscar Empleos</a></li>
+                        <li><a href="#" class="hover:text-white">Recursos Académicos</a></li>
+                        <li><a href="#" class="hover:text-white">Intercambios</a></li>
+                        <li><a href="#" class="hover:text-white">Para Empresas</a></li>
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium mb-4">Soporte</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Centro de Ayuda</a></li>
+                        <li><a href="#" class="hover:text-white">Contacto</a></li>
+                        <li><a href="#" class="hover:text-white">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white">Términos de Uso</a></li>
+                    </ul>
+                </div>
+                <!-- <div>
+                    <h3 class="text-white font-medium mb-4">Suscríbete</h3>
+                    <p class="text-sm mb-4">Recibe las últimas oportunidades laborales y recursos directamente en tu
+                        correo.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Tu correo electrónico"
+                            class="px-4 py-2 w-full bg-gray-700 border-none rounded-l text-sm">
+                        <button class="bg-primary text-white px-4 py-2 rounded-r !rounded-button whitespace-nowrap">
+                            Enviar
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+            <div class="border-t border-gray-700 mt-12 pt-8 text-sm text-center">
+                <p>© 2025 CampusWork. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</script>
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/573144522019" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] text-white rounded-lg shadow-lg hover:bg-[#128C7E] transition-colors duration-300 flex items-center justify-center w-16 h-16 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-8 h-8 fill-current">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
+    </a>
+    <script src="/js/campuswork.js"></script>
+    <script>
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.md\\:hidden button');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    if (mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.remove('hidden');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

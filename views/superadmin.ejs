@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Superadministrador - CampusWork</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/superadmin.css" />
+  </head>
+
+  <body>
+    <!-- Navegación -->
+    <nav>
+      <div class="container nav-container">
+        <div class="flex items-center">
+          <div class="logo">CampusWork</div>
+          <div class="nav-links">
+            <a href="/superadmin" class="active">Usuarios</a>
+            <a href="/campuswork">Ver Sitio</a>
+          </div>
+        </div>
+        <div class="user-menu">
+          <span id="userName" class="user-name">Superadmin</span>
+          <button id="logoutBtn" class="logout-btn">
+            <i class="ri-logout-box-line ri-lg"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container main-content">
+      <div class="header">
+        <h1 class="title">Gestión de Usuarios</h1>
+        <button id="addUserBtn" class="add-btn">
+          <i class="ri-user-add-line"></i> Nuevo Usuario
+        </button>
+      </div>
+
+      <!-- Tabla de Usuarios -->
+      <div class="table-container">
+        <div class="table-scroll">
+          <!-- Tabla de usuarios -->
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (typeof usuarios !== 'undefined' && usuarios && usuarios.length > 0) { %> 
+                <% usuarios.forEach(usuario => { %> 
+                  <tr>
+                    <td><%= usuario.id %></td>
+                    <td><%= usuario.nombre %></td>
+                    <td><%= usuario.email %></td>
+                    <td>
+                      <% 
+                        let rolTexto = '';
+                        switch(usuario.rol) {
+                          case 'usuario':
+                            rolTexto = 'Usuario';
+                            break;
+                          case 'admin':
+                            rolTexto = 'Administrador';
+                            break;
+                          case 'superadmin':
+                            rolTexto = 'Superadministrador';
+                            break;
+                          default:
+                            rolTexto = usuario.rol || 'Desconocido';
+                        }
+                      %>
+                      <%= rolTexto %>
+                    </td>
+                    <td>
+                      <button class="delete-btn" data-id="<%= usuario.id %>">
+                        <i class="ri-delete-bin-line"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %> 
+                <tr>
+                  <td colspan="5">No hay usuarios disponibles.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>          
+        </div>
+      </div>
+
+      <!-- Modal para Añadir Usuario -->
+      <div id="userModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">Añadir Usuario</h2>
+            <button id="closeModal" class="close-modal">
+              <i class="ri-close-line ri-lg"></i>
+            </button>
+          </div>
+          <form action="/superadmin/crear" method="POST">
+            <div class="form-group">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                class="form-input"
+                placeholder="Nombre completo"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                placeholder="correo@ejemplo.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="password" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="rol" class="form-label">Rol</label>
+              <select id="rol" name="rol" class="form-select" required>
+                <option value="usuario">Usuario</option>
+                <option value="admin">Administrador</option>
+                <option value="superadmin">Superadministrador</option>
+              </select>
+            </div>
+            <button type="submit" class="submit-btn">Guardar</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmación para Eliminar -->
+      <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">Confirmar Eliminación</h2>
+            <button id="closeDeleteModal" class="close-modal">
+              <i class="ri-close-line ri-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button id="cancelDelete" class="cancel-btn">Cancelar</button>
+            <button id="confirmDelete" class="delete-confirm-btn">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Script para manejar el modal y las acciones -->
+      <script>
+        // Elementos del DOM para el modal de añadir usuario
+        const addUserBtn = document.getElementById('addUserBtn');
+        const userModal = document.getElementById('userModal');
+        const closeModal = document.getElementById('closeModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+      
+        // Elementos del DOM para el modal de eliminar usuario
+        const deleteModal = document.getElementById('deleteModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDelete = document.getElementById('confirmDelete');
+        let userIdToDelete = null;
+      
+        // Abrir el modal cuando se hace clic en el botón "Nuevo Usuario"
+        addUserBtn.addEventListener('click', () => {
+          userModal.style.display = 'flex';
+        });
+      
+        // Cerrar el modal cuando se hace clic en el botón de cerrar
+        closeModal.addEventListener('click', () => {
+          userModal.style.display = 'none';
+        });
+      
+        // Cerrar el modal cuando se hace clic fuera del contenido del modal
+        window.addEventListener('click', (event) => {
+          if (event.target === userModal) {
+            userModal.style.display = 'none';
+          }
+          if (event.target === deleteModal) {
+            deleteModal.style.display = 'none';
+          }
+        });
+      
+        // Manejar el cierre de sesión
+        logoutBtn.addEventListener('click', () => {
+          // Redirigir a la página de inicio de sesión o realizar la acción de cierre de sesión
+          window.location.href = '/';
+        });
+
+        // Manejar los botones de eliminar
+        document.querySelectorAll('.delete-btn').forEach(button => {
+          button.addEventListener('click', () => {
+            userIdToDelete = button.getAttribute('data-id');
+            deleteModal.style.display = 'flex';
+          });
+        });
+
+        // Cerrar el modal de eliminar
+        closeDeleteModal.addEventListener('click', () => {
+          deleteModal.style.display = 'none';
+        });
+
+        // Cancelar la eliminación
+        cancelDelete.addEventListener('click', () => {
+          deleteModal.style.display = 'none';
+        });
+
+        // Confirmar la eliminación
+        confirmDelete.addEventListener('click', async () => {
+          if (userIdToDelete) {
+            try {
+              const response = await fetch(`/api/usuarios/eliminar/${userIdToDelete}`, {
+                method: 'DELETE',
+              });
+              
+              if (response.ok) {
+                // Recargar la página para mostrar los cambios
+                window.location.reload();
+              } else {
+                const data = await response.json();
+                alert(`Error: ${data.error || 'No se pudo eliminar el usuario'}`);
+              }
+            } catch (error) {
+              alert('Error al conectar con el servidor');
+              console.error(error);
+            }
+          }
+          deleteModal.style.display = 'none';
+        });
+      </script>
+    </div>
+  </body>
+</html>

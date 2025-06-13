@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfiles - CampusWork</title>
+  <link rel="stylesheet" href="/css/profiles.css" />
+</head>
+<body>
+  <h1>Selecciona un perfil</h1>
+  <div class="profiles-container">
+    <% if (usuarios && usuarios.length > 0) { %>
+      <% usuarios.forEach(usuario => { %>
+        <div class="profile-box <%= usuario.rol %>" onclick="window.location.href='/login/<%= usuario.id %>'">
+          <div class="avatar"><%= usuario.nombre.charAt(0).toUpperCase() %></div>
+          <div class="username"><%= usuario.nombre %></div>
+          <div class="role"><%= usuario.rol %></div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="profile-box superadmin" onclick="window.location.href='/login/1'">
+        <div class="avatar">S</div>
+        <div class="username">Superadmin</div>
+        <div class="role">superadmin</div>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
